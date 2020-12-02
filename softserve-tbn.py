@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 
-dummyPort = 1883
+
 
 class Jackbord():
     def __init__(self, jackbordID, username, password):
@@ -57,6 +57,20 @@ class Jackbord():
 
         return(newChannelClass)
     
+    def cmd(self, commandString):
+        self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)
+    
+    def cmdlive(self):
+        print("This is live command mode for the not softserve:")
+        print("Please hit Ctrl + C to return to python interpreter")
+        print("Yes, this is quite developmental. Yes, this is really only if you are in python interactive shell")
+
+        while True:
+            command = input("JB CMD>>")
+            self.cmd(command)
+
+
+
 
 
 class channel():
