@@ -1,6 +1,14 @@
 import paho.mqtt.client as mqtt
 
+#TODO / THOUGHTS / possible features:
+#   Type enforcing: Give the user the ability to specify what data-type the variable will be automagically interpreted as
+#   this at best could be super efficient, and save programmers the hassle of needing to do their own type conversion
+#   at worst, it would step on the toes of people who don't know exactly why their code isn't working but has something to do
+#   with this hidden layer
 
+#   Credentials saved to config file?
+
+#DISPLAY FEEDBACK FROM THE JACKBORD
 
 class Jackbord():
     def __init__(self, jackbordID, username, password):
@@ -29,9 +37,9 @@ class Jackbord():
         self.__mqttClient.on_connect = self.__onMqttConnect
         self.__mqttClient.on_message = self.__onMqttMessage
 
-        #Connect to the mqtt broker
+
         self.__mqttClient.connect(self.hostAddress, self.hostPort)
-        #Start our mqtt client loop
+
         self.__mqttClient.loop_start()
 
 
@@ -51,6 +59,7 @@ class Jackbord():
         if not type(topic) == str:
             topic = str(topic)
 
+        #String parsing0.
         newChannelClass = channel(self.__mqttClient, self.__jackbordID, topic)
         self.__channelClassList[str(self.__jackbordID + "/" + topic)] = newChannelClass
         self.__mqttClient.subscribe(self.__jackbordID + "/" + topic)
@@ -76,7 +85,7 @@ class Jackbord():
 class channel():
     def __init__(self, mqttClient, jackbordID, topic):
         self.__mqttClient = mqttClient
-        self.__jackbordID = jackbordID
+        self.jackbordID = jackbordID
         self.__topic = topic
         self.__value = "Null"
 
@@ -90,4 +99,4 @@ class channel():
     
     def set(self, value):
         self.__value = value
-        self.__mqttClient.publish(topic=str(self.__jackbordID + "/" + self.__topic), payload=value)
+        self.__mqttClient.publish(topic=str(self.jackbordID + "/" + self.__topic), payload=value)
