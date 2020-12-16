@@ -35,6 +35,8 @@ class Jackbord():
         self.__inLiveMode = False
         self.__printOutput = ""
 
+        self.__previousCmdSent = ""
+
 
         
     
@@ -81,7 +83,9 @@ class Jackbord():
         return(newChannelClass)
     
     def cmd(self, commandString):
-        self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)
+        if (commandString != self.__previousCmdSent):
+            self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)
+            self.__previousCmdSent = commandString
     
     def cmdlive(self):
         self.__inLiveMode = True
@@ -131,4 +135,4 @@ class channel():
 
 
 if __name__ == "__main__":
-    jb1 = Jackbord("red.head", "111254186336836811343", "7b3b518e98")
+    jb1 = Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")

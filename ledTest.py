@@ -2,7 +2,9 @@ from softservetbn import *
 from random import randint
 import time
 
-jb1 = Jackbord("red.head", "111254186336836811343", "7b3b518e98")
+#Standard python adaptation of the example random color led program in octagon
+
+jb1 = Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")
 
 total_leds = 4
 pin_no = "a2"
