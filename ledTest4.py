@@ -40,6 +40,7 @@ while True:
     #They would need to be string formatted into the command
     jb1.cmd("sled {0} {1} {2} {3} {4} {5}".format(pin_no, total_leds, led_no, red, green, blue))
 
+    print (potReading.get())
     if potReading.get() != "Null":
         delay = float(potReading.get())
 

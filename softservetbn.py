@@ -69,10 +69,16 @@ class Jackbord():
         
 
     
-    def bindChan(self, channelNum):
+    def bindchan(self, channelNum):
         
         #Enforce string type on topic key
-        if not type(channelNum) == str:
+        # if not type(channelNum) == str:
+        #     channelNum = str(channelNum)
+
+        if type(channelNum) == str:
+            channelNum = str(self.__parsePinString(channelNum))
+
+        if type(channelNum) == int:
             channelNum = str(channelNum)
 
         #String parsing0.
@@ -83,6 +89,9 @@ class Jackbord():
         return(newChannelClass)
     
     def cmd(self, commandString):
+        #BAD PROGRAMMING: This does nothing for the desired channel is modifed by a separate program.
+        #The reason why we want to do this is to cut down on redundant / spammy messages to mqtt.
+        #Perhaps implement a way to check what the value of the channel on mqtt broker is?
         if (commandString != self.__previousCmdSent):
             self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)
             self.__previousCmdSent = commandString
@@ -111,7 +120,14 @@ class Jackbord():
                 print()
                 break
 
+    
+    def __parsePinString(self, pinString):
+        if len(pinString) == 2:
+            if pinString[0].isalpha() and pinString[1].isdigit():
+                pinsPerPort = 5
+                chanNum = (ord(pinString[0].lower()) - ord("a")) * pinsPerPort + int(pinString[1])
 
+                return chanNum
 
 
 
