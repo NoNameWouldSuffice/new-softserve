@@ -1,0 +1,8 @@
+setup.py
+softserve/__init__.py
+softserve/softserve.py
+softserve.egg-info/PKG-INFO
+softserve.egg-info/SOURCES.txt
+softserve.egg-info/dependency_links.txt
+softserve.egg-info/requires.txt
+softserve.egg-info/top_level.txt
