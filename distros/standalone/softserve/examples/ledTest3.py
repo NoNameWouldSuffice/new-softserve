@@ -1,3 +1,7 @@
+#assuming that the standalone version of softserve is being used, we need to temporarily add softsere to python's path
+import sys
+sys.path.append("../../")
+
 import softserve
 import time
 
@@ -6,7 +10,7 @@ import time
 #If the signal from the pot is greater than 90, the led is green
 #If the signal is between 10 and 90, the led is blue
 
-jb1 = softserve.Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")
+jb1 = softserve.Jackbord("JACKBORD ID HERE", "MQTT USERNAME HERE", "MQTT PASSWORD HERE")
 
 
 pin_no = "a2"

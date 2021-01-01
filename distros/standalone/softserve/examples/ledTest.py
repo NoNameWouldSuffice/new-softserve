@@ -1,10 +1,14 @@
+#assuming that the standalone version of softserve is being used, we need to temporarily add softsere to python's path
+import sys
+sys.path.append("../../")
+
 import softserve
 from random import randint
 import time
 
 #Standard python adaptation of the example random color led program in octagon
 
-jb1 = softserve.Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")
+jb1 = softserve.Jackbord("JACKBORD ID HERE", "MQTT USERNAME HERE", "MQTT PASSWORD HERE")
 
 total_leds = 4
 pin_no = "a2"

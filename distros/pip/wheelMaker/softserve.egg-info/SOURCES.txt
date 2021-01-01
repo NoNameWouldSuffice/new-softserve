@@ -1,6 +1,7 @@
 setup.py
+softserve/Jackbord.py
 softserve/__init__.py
-softserve/softserve.py
+softserve/channel.py
 softserve.egg-info/PKG-INFO
 softserve.egg-info/SOURCES.txt
 softserve.egg-info/dependency_links.txt

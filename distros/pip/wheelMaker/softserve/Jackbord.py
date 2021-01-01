@@ -1,16 +1,6 @@
 import paho.mqtt.client as mqtt
-from queue import Queue
+from .channel import Channel
 import time
-
-#TODO / THOUGHTS / possible features:
-#   Type enforcing: Give the user the ability to specify what data-type the variable will be automagically interpreted as
-#   this at best could be super efficient, and save programmers the hassle of needing to do their own type conversion
-#   at worst, it would step on the toes of people who don't know exactly why their code isn't working but has something to do
-#   with this hidden layer
-
-#   Credentials saved to config file?
-
-#DISPLAY FEEDBACK FROM THE JACKBORD
 
 class Jackbord():
     def __init__(self, jackbordID, username, password):
@@ -82,7 +72,7 @@ class Jackbord():
             channelNum = str(channelNum)
 
         #String parsing0.
-        newChannelClass = channel(self.__mqttClient, self.__jackbordID, channelNum)
+        newChannelClass = Channel(self.__mqttClient, self.__jackbordID, channelNum)
         self.__channelClassList[str(self.__jackbordID + "/chan/" + channelNum)] = newChannelClass
         self.__mqttClient.subscribe(self.__jackbordID + "/chan/" + channelNum)
 
@@ -128,27 +118,3 @@ class Jackbord():
                 chanNum = (ord(pinString[0].lower()) - ord("a")) * pinsPerPort + int(pinString[1])
 
                 return chanNum
-
-
-
-class channel():
-    def __init__(self, mqttClient, jackbordID, channelNum):
-        self.__mqttClient = mqttClient
-        self.jackbordID = jackbordID
-        self.__channelNum = channelNum
-        self.__value = "Null"
-
-    def updateFromServer (self, message):
-        self.__value = message
-
-    
-    def get(self):
-        return self.__value
-    
-    def set(self, value):
-        self.__value = value
-        self.__mqttClient.publish(topic=str(self.jackbordID + "/set/" + self.__channelNum), payload=value)
-
-
-if __name__ == "__main__":
-    jb1 = Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")

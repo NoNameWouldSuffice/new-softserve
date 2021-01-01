@@ -1,3 +1,7 @@
+#assuming that the standalone version of softserve is being used, we need to temporarily add softsere to python's path
+import sys
+sys.path.append("../../")
+
 import softserve
 import time
 
@@ -5,7 +9,7 @@ import time
 #When the pot is above 90 - light goes on
 #When the pot is below 10 - light goes off
 
-jb1 = softserve.Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")
+jb1 = softserve.Jackbord("JACKBORD ID HERE", "MQTT USERNAME HERE", "MQTT PASSWORD HERE")
 
 jb1.cmd("gvr b1")
 

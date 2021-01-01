@@ -1,3 +1,7 @@
+#assuming that the standalone version of softserve is being used, we need to temporarily add softsere to python's path
+import sys
+sys.path.append("../../")
+
 import softserve
 from random import randint
 import time
@@ -5,7 +9,7 @@ import time
 #Cylces through each of the 4 leds and gives it a random color
 #The potentiometer controls the speed at which the program cycles through the leds
 
-jb1 = softserve.Jackbord("red.head", "111254186336836811343", "1fa60c9fc6")
+jb1 = softserve.Jackbord("JACKBORD ID HERE", "MQTT USERNAME HERE", "MQTT PASSWORD HERE")
 
 total_leds = 4
 pin_no = "a2"
