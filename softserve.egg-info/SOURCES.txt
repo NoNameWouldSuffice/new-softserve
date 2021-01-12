@@ -1,3 +1,4 @@
+MANIFEST.in
 README.md
 setup.py
 deps/__init__.py
@@ -14,6 +15,7 @@ deps/paho/mqtt/subscribeoptions.py
 softserve/Jackbord.py
 softserve/__init__.py
 softserve/channel.py
+softserve/server.CA.crt
 softserve.egg-info/PKG-INFO
 softserve.egg-info/SOURCES.txt
 softserve.egg-info/dependency_links.txt

@@ -60,7 +60,7 @@ class Jackbord():
 
 
     def __onMqttConnect(self, client, userdata, flags, rc):
-            print("Connected to Mqtt server with result code ", (rc))
+            #print("Connected to Mqtt server with result code ", (rc))
             pass
     
     def __onMqttMessage(self, client, userdata, message):

@@ -8,5 +8,6 @@ py_modules = ["softserve"],
 author="Lachlan Paulsen",
 packages = find_packages(),
 install_requires=["paho-mqtt==1.5.1"],
-python_requires='>=3.6.7'
+python_requires='>=3.6.7',
+include_package_data=True
 )
