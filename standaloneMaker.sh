@@ -5,6 +5,7 @@ read versionNum
 mkdir softserve-standalone-$versionNum
 cp -r ./softserve/ ./softserve-standalone-$versionNum
 cp -r ./deps ./softserve-standalone-$versionNum/softserve/
-cd ./softserve-softserve-$versionNum
-zip -r ../softserve-standalone-$versionNum ../softserve-standalone-$versionNum.zip *
+cd ./softserve-$versionNum
+zip -r ./softserve-standalone-$versionNum ./softserve-standalone-$versionNum/*
+rm -rf ./softserve-standalone-$versionNum
 
