@@ -1,5 +1,0 @@
-First tutorial for making pip packages that I got working with my pea-sized brain:
-https://dzone.com/articles/executable-package-pip-install
-
-TL;DR: To make a fresh "wheel maker" you just need the directory with all the code, 
-a configured setup.py file and then run the command [python setup.py bdist_wheel]
