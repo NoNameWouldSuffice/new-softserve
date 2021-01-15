@@ -2,6 +2,7 @@ import os
 from softserve.channel import Channel
 import time
 import ssl
+import atexit
 
 try:
     #We will attempt to load dependencies from the built-in deps module which will be present if this is a standalone copy of softserve
@@ -21,8 +22,10 @@ class Jackbord():
         #Mqtt broker port
         #Mqtt client instance
 
-        #TEMPORARY: Retrieve the path of the softserve library (Or at least where the channel sub-module is) on the system
+        
         self.__MODPATH = os.path.dirname(__file__)
+
+        self.__mqttResultCode = -1
 
         self.__channelClassList = {} #Format: "mqtt topic" : ChannelClass instance
 
@@ -41,7 +44,12 @@ class Jackbord():
 
         self.__previousCmdSent = ""
 
+        self.__clientConnected = True
 
+        atexit.register(self.__gracefulExit)
+
+    # def onMqttLog(self, client, userdata, level, buf):
+    #     print("log: ",buf)
         
     
 
@@ -49,19 +57,35 @@ class Jackbord():
         self.__mqttClient.username_pw_set(username, password)
         self.__mqttClient.on_connect = self.__onMqttConnect
         self.__mqttClient.on_message = self.__onMqttMessage
+        # self.__mqttClient.on_log = self.onMqttLog
 
         self.__mqttClient.tls_set((self.__MODPATH + "/server.CA.crt"))
         self.__mqttClient.tls_insecure_set(True)
 
+        mqttTimeout = 5
+
+        timeStop = time.time() + mqttTimeout
 
         self.__mqttClient.connect(self.hostAddress, self.hostPort)
-
         self.__mqttClient.loop_start()
 
 
+        while self.__mqttResultCode == -1:
+            time.sleep(0.1)
+            if time.time() > timeStop:
+                raise Exception('Failed to connect after {0} seconds'.format(mqttTimeout))
+        
+
+            if self.__mqttResultCode != 0:
+                raise Exception("Connection failed. Result code is {0}".format(self.__mqttResultCode))
+
+
     def __onMqttConnect(self, client, userdata, flags, rc):
-            #print("Connected to Mqtt server with result code ", (rc))
-            pass
+        if len(self.__channelClassList.keys()) != 0:
+            for topic in self.__channelClassList.keys():
+                self.__mqttClient.subscribe(str(topic))
+            
+        self.__mqttResultCode = rc
     
     def __onMqttMessage(self, client, userdata, message):
         
@@ -135,3 +159,7 @@ class Jackbord():
                 chanNum = (ord(pinString[0].lower()) - ord("a")) * pinsPerPort + int(pinString[1])
 
                 return chanNum
+    
+    def __gracefulExit(self):
+        if self.__clientConnected:
+            self.__mqttClient.disconnect()

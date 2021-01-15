@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
 name = "softserve",
-version = "12.1.0",
+version = "12.1.1",
 description = "A python companion of the jackbord",
 py_modules = ["softserve"],
 author="Lachlan Paulsen",
