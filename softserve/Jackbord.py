@@ -76,7 +76,7 @@ class Jackbord():
                 raise Exception('Failed to connect after {0} seconds'.format(mqttTimeout))
         
 
-            if self.__mqttResultCode != 0:
+            if self.__mqttResultCode != 0 and self.__mqttResultCode != -1:
                 raise Exception("Connection failed. Result code is {0}".format(self.__mqttResultCode))
 
 
