@@ -163,3 +163,4 @@ class Jackbord():
     def __gracefulExit(self):
         if self.__clientConnected:
             self.__mqttClient.disconnect()
+        time.sleep(0.05)
