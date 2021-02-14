@@ -1,5 +1,6 @@
 import os
 from softserve.channel import Channel
+from softserve.credLoader import CredLoader
 import time
 import ssl
 import atexit
@@ -15,29 +16,34 @@ except ImportError:
 
 
 class Jackbord():
-    def __init__(self, jackbordID, username, password):
+    def __init__(self, jackbordID):
 
         #List of bound variables / channel classes
         #Mqtt broker address
         #Mqtt broker port
         #Mqtt client instance
 
-        
+        #The directory of where softserve has been imported from
         self.__MODPATH = os.path.dirname(__file__)
 
+        #A flag in global space used to pass the result code from the __onMqttConnect callback and the openMqttServer method
         self.__mqttResultCode = -1
 
+
+        #Dictionary that stores channel class instances for later use
         self.__channelClassList = {} #Format: "mqtt topic" : ChannelClass instance
 
-        self.hostAddress = "mqttb.jackbord.org"
+        self.hostAddress = "mqtta.jackbord.org"
+
+        self.credLoader = CredLoader()
 
         self.__jackbordID = jackbordID
 
-        self.hostPort = 8883
+        self.hostPort = 80
 
         self.__mqttClient = mqtt.Client()
 
-        self.__openMqttServer(username, password)
+        self.__openMqttServer()
 
         self.__inLiveMode = False
         self.__printOutput = ""
@@ -46,6 +52,10 @@ class Jackbord():
 
         self.__clientConnected = True
 
+        self.__sendMID = -1 #The ID of the last publish request
+
+        self.__receiveMID = -1
+
         atexit.register(self.__gracefulExit)
 
     # def onMqttLog(self, client, userdata, level, buf):
@@ -53,10 +63,12 @@ class Jackbord():
         
     
 
-    def __openMqttServer(self, username, password):
-        self.__mqttClient.username_pw_set(username, password)
+    def __openMqttServer(self):
+        credDict = self.credLoader.loadCreds()
+        self.__mqttClient.username_pw_set(credDict["username"], credDict["password"])
         self.__mqttClient.on_connect = self.__onMqttConnect
         self.__mqttClient.on_message = self.__onMqttMessage
+        self.__mqttClient.on_publish = self.__onMqttPublish
         # self.__mqttClient.on_log = self.onMqttLog
 
         self.__mqttClient.tls_set((self.__MODPATH + "/server.CA.crt"))
@@ -97,6 +109,12 @@ class Jackbord():
 
             if incomingValue != self.__channelClassList[message.topic].get():
                 self.__channelClassList[message.topic].updateFromServer(incomingValue)
+    
+    def __onMqttPublish(self, client, userdata, mid):
+        # print("Userdata: " + str(userdata))
+        # print("Result: " + str(mid))
+        self.__receiveMID = mid
+        # print("Receive MID is now: ", mid)
         
 
     
@@ -113,7 +131,7 @@ class Jackbord():
             channelNum = str(channelNum)
 
         #String parsing0.
-        newChannelClass = Channel(self.__mqttClient, self.__jackbordID, channelNum)
+        newChannelClass = Channel(self.__mqttClient, self.__jackbordID, channelNum, self)
         self.__channelClassList[str(self.__jackbordID + "/chan/" + channelNum)] = newChannelClass
         self.__mqttClient.subscribe(self.__jackbordID + "/chan/" + channelNum)
 
@@ -124,7 +142,7 @@ class Jackbord():
         #The reason why we want to do this is to cut down on redundant / spammy messages to mqtt.
         #Perhaps implement a way to check what the value of the channel on mqtt broker is?
         if (commandString != self.__previousCmdSent):
-            self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)
+            self.updateSentMID(self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)[1])
             self.__previousCmdSent = commandString
     
     def cmdlive(self):
@@ -148,7 +166,6 @@ class Jackbord():
             except KeyboardInterrupt:
                 self.__inLiveMode = False
                 self.__mqttClient.unsubscribe(str(self.__jackbordID + "/jprint"))
-                print()
                 break
 
     
@@ -162,5 +179,24 @@ class Jackbord():
     
     def __gracefulExit(self):
         if self.__clientConnected:
+
+            attempts = 5
+            for attempt in range (0, attempts):
+                if self.donePublishing():
+                    break
+                else:
+                    # print("Failed to quit, client not done publishing")
+                    time.sleep(0.05)
+
             self.__mqttClient.disconnect()
-        time.sleep(0.05)
+    
+    def updateSentMID(self, newMID):
+        if newMID > self.__sendMID:
+            self.__sendMID = newMID
+            # print("Sent mid is now: ", newMID)
+    
+    def donePublishing(self):
+        if self.__receiveMID >= self.__sendMID:
+            return True
+        else:
+            return False
