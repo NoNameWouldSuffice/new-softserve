@@ -43,11 +43,11 @@ class CredLoader():
             print(exceptionType)
 
             if exceptionType == "FileNotFoundError":
-                print("\n####################\n CRED FILE NOT FOUND. YOU MUST IMPORT A VALID CRED FILE USING credLoader.importCreds \n\n")
+                print("\n####################\n CRED FILE NOT FOUND. \n YOU MUST IMPORT A VALID CRED FILE BY IMPORTING SOFTSERVE AND USING \n THE COMMAND softserve.importCreds()\n\n")
                 raise
             
             if exceptionType == "JSONDecodeError":
-                print("\n####################\n CRED FILE EXIST BUT IS CORRUPTED. YOU MUST IMPORT A NEW CRED FILE USING credLoader.importCreds \n\n")
+                print("\n####################\n CRED FILE EXIST BUT IS CORRUPTED. \n YOU MUST IMPORT A NEW CRED FILE BY IMPORTING SOFTSERVE AND USING \n THE COMMAND softserve.importCreds()\n\n")
                 raise
 
 
