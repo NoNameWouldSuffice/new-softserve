@@ -10,7 +10,7 @@ import softserve
 
 
 #Initialise a connection with the jackbord with a profileID of 101a
-jb1 = softserve.Jackbord("101a")
+jb1 = softserve.Jackbord("profile-id-here")
 
 #Initialise button on a1
 jb1.cmd("btg a1")
