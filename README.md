@@ -1,6 +1,9 @@
 # new-softserve
 The development of the Jackbord-python library starts here
 
+## Crash course documentation document available here: https://docs.google.com/document/d/1fniUAaZcdtHJZzuqJWjoJGyMrFEbRqHns_oaT8hcBl4/edit?usp=sharing
+I haven't yet done "proper" documentation yet plz don't hurt me
+
 Ideally, you've visited this repository because you know what this is and are helping out with developing/testing this library.
 
 If not, welcome! Sorry if this is a rather poorly organized github repository. I'm kind of new to github and will eventually implement things such as "best practices" and whatnot.
