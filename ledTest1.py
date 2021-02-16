@@ -18,7 +18,6 @@ jb1.cmd("btg a1")
 #Initialise pot on b1 with range of 0-255 for color selection
 jb1.cmd("gvr b1 0 255")
 jb1.cmd("setuct b1 1.1")
-print(jb1.donePublishing())
 
 #Set up channel objects to record the readings for the button on pin a1 and the potentiometer on pin b1 respectively
 #The channel objects button and pot are what we will use to retrieve the latest readings from the jackbord

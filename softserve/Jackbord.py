@@ -16,7 +16,7 @@ except ImportError:
 
 
 class Jackbord():
-    def __init__(self, jackbordID):
+    def __init__(self, profileID):
 
         #List of bound variables / channel classes
         #Mqtt broker address
@@ -37,7 +37,7 @@ class Jackbord():
 
         self.credLoader = CredLoader()
 
-        self.__jackbordID = jackbordID
+        self.__profileID = profileID
 
         self.hostPort = 80
 
@@ -101,7 +101,7 @@ class Jackbord():
     
     def __onMqttMessage(self, client, userdata, message):
         
-        if message.topic == str(self.__jackbordID + "/jprint") and self.__inLiveMode == True:
+        if message.topic == str(self.__profileID + "/jprint") and self.__inLiveMode == True:
             self.__printOutput += (message.payload.decode() + "\n")
         
         if (message.topic) in self.__channelClassList.keys():
@@ -131,9 +131,9 @@ class Jackbord():
             channelNum = str(channelNum)
 
         #String parsing0.
-        newChannelClass = Channel(self.__mqttClient, self.__jackbordID, channelNum, self)
-        self.__channelClassList[str(self.__jackbordID + "/chan/" + channelNum)] = newChannelClass
-        self.__mqttClient.subscribe(self.__jackbordID + "/chan/" + channelNum)
+        newChannelClass = Channel(self.__mqttClient, self.__profileID, channelNum, self)
+        self.__channelClassList[str(self.__profileID + "/chan/" + channelNum)] = newChannelClass
+        self.__mqttClient.subscribe(self.__profileID + "/chan/" + channelNum)
 
         return(newChannelClass)
     
@@ -141,13 +141,14 @@ class Jackbord():
         #BAD PROGRAMMING: This does nothing for the desired channel is modifed by a separate program.
         #The reason why we want to do this is to cut down on redundant / spammy messages to mqtt.
         #Perhaps implement a way to check what the value of the channel on mqtt broker is?
-        if (commandString != self.__previousCmdSent):
-            self.updateSentMID(self.__mqttClient.publish(str(self.__jackbordID + "/cmd"), payload=commandString)[1])
+        if commandString != self.__previousCmdSent:
+            self.updateSentMID(self.__mqttClient.publish(str(self.__profileID + "/cmd"), payload=commandString)[1])
             self.__previousCmdSent = commandString
+            self.waitUntilPublished(5, 0.1)
     
     def cmdlive(self):
         self.__inLiveMode = True
-        self.__mqttClient.subscribe(str(self.__jackbordID + "/jprint"))
+        self.__mqttClient.subscribe(str(self.__profileID + "/jprint"))
         print("This is live command mode for the not softserve:")
         print("Please hit Ctrl + C to return to python interpreter")
         print("Yes, this is quite developmental. Yes, this is really only if you are in python interactive shell")
@@ -165,7 +166,7 @@ class Jackbord():
                     
             except KeyboardInterrupt:
                 self.__inLiveMode = False
-                self.__mqttClient.unsubscribe(str(self.__jackbordID + "/jprint"))
+                self.__mqttClient.unsubscribe(str(self.__profileID + "/jprint"))
                 break
 
     
@@ -181,12 +182,8 @@ class Jackbord():
         if self.__clientConnected:
 
             attempts = 5
-            for attempt in range (0, attempts):
-                if self.donePublishing():
-                    break
-                else:
-                    # print("Failed to quit, client not done publishing")
-                    time.sleep(0.05)
+            self.waitUntilPublished(attempts, 0.5)
+            
 
             self.__mqttClient.disconnect()
     
@@ -200,3 +197,12 @@ class Jackbord():
             return True
         else:
             return False
+    
+    def waitUntilPublished(self, attempts, delay):
+        for attempt in range (0, attempts):
+                if self.donePublishing():
+                    break
+                else:
+                    # print("Failed to quit, client not done publishing")
+                    time.sleep(0.01)
+
