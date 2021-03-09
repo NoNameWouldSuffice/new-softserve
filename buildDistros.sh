@@ -8,7 +8,7 @@ rm -rf softserve.egg-info
 rm -rf build
 
 echo "Pip distro complete"
-echo "Please put in the version number for this version of standalone softserve (use hyphens '-' instead of dots '."
+echo "Please put in the version number for this version of standalone softserve (use hyphens '-' instead of dots '.)"
 read versionNum
 
 echo versionNum
@@ -18,7 +18,9 @@ cp -r ./deps ./softserve-standalone-$versionNum/softserve/
 #cd ./softserve-standalone-$versionNum
 #zip -r ./softserve-standalone-$versionNum.zip . -i ./softserve-standalone-$versionNum/*
 
-
-zip -r -q softserve-standalone-$versionNum.zip softserve-standalone-$versionNum
+cd softserve-standalone-$versionNum
+zip -r -q softserve-standalone-$versionNum.zip softserve
+mv softserve-standalone-$versionNum.zip ../
+cd ..
 rm -rf ./softserve-standalone-$versionNum
-echo "Standalone distro complete
+echo "Standalone distro complete"
