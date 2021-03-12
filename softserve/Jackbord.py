@@ -171,10 +171,12 @@ class Jackbord():
 
     
     def __parsePinString(self, pinString):
+        letToNum = {"a" : 0, "b" : 1, "c" : 2, "d" : 3, "l" : 4.8}
+
         if len(pinString) == 2:
             if pinString[0].isalpha() and pinString[1].isdigit():
                 pinsPerPort = 5
-                chanNum = (ord(pinString[0].lower()) - ord("a")) * pinsPerPort + int(pinString[1])
+                chanNum = int((letToNum.get(pinString[0].lower())) * pinsPerPort + int(pinString[1]))
 
                 return chanNum
     
