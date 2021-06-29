@@ -3,29 +3,19 @@ from json.decoder import JSONDecodeError
 import os
 import softserve
 
-import tkinter as tk
-from tkinter import filedialog
-
 
 class CredLoader():
     def __init__(self):
         self.__credPath = os.path.dirname(__file__) + "/mqttCreds.json"
 
-    def importCreds(self):
-        root = tk.Tk()
-        root.withdraw()
-
-        filePath = filedialog.askopenfilename()
+    def importCreds(self, username, password):
+        credDict = {"username" : username, "password" : password}
 
         try:
-            with open(filePath) as newCredFile:
-                credDict = json.load(newCredFile)
-                if "username" in credDict and "password" in credDict:
-                    with open(self.__credPath, "w") as storedCredFile:
-                        json.dump(credDict, storedCredFile)
-                        print("Credentials successfully imported")
-                else:
-                    print("JSON file does not contain username and password")
+            
+            with open(self.__credPath, "w") as storedCredFile:
+                json.dump(credDict, storedCredFile)
+                print("Credentials successfully imported")
         except:
             print('Failed to read as JSON file')
 

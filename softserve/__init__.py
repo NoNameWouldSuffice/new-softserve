@@ -2,9 +2,9 @@ from .Jackbord import Jackbord
 from .credLoader import CredLoader
 import softserve
 
-def importCreds():
+def importCreds(username, password):
     cl = CredLoader()
-    cl.importCreds()
+    cl.importCreds(username, password)
 
 setattr(softserve, "importCreds", importCreds)
 

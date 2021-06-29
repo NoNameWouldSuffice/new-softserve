@@ -5,8 +5,8 @@ import time
 import ssl
 import atexit
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
 
 try:
     # We will attempt to load dependencies from the built-in deps module which will be present if this is a standalone copy of softserve
@@ -65,8 +65,8 @@ class Jackbord():
     #     print("log: ",buf)
 
     def __openMqttServer(self):
-        logger = logging.getLogger(__name__)
-        self.__mqttClient.enable_logger(logger)
+        # logger = logging.getLogger(__name__)
+        # self.__mqttClient.enable_logger(logger)
         
         
         credDict = self.credLoader.loadCreds()
