@@ -176,9 +176,11 @@ class Jackbord():
     def cmdlive(self):
         self.__inLiveMode = True
         self.__mqttClient.subscribe(str(self.__profileID + "/jprint"))
-        print("This is live command mode for the not softserve:")
-        print("Please hit Ctrl + C to return to python interpreter")
-        print("Yes, this is quite developmental. Yes, this is really only if you are in python interactive shell")
+        print("""
+        This is the live command mode for softserve. Only for use with an interactive python shell
+        To send commands to the jackbord, type them and press enter.
+        To drop back into python shell, press CTRL-Z to exit.
+        """)
 
         while True:
             try:

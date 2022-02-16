@@ -56,9 +56,6 @@ while True:
         #Fetch the latest reading from the button and potentiometer and return them as usable data types
         buttonReading = bool(float(button.get()))
         potReading = round(float(pot.get()))
-
-        # print("Button: {0}".format(buttonReading))
-        # print("Pot: {0}".format(potReading))
         
         if (buttonReading and buttonReading != oldButtonReading):
             color = switchColors(color)

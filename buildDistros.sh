@@ -13,7 +13,7 @@ read versionNum
 
 echo versionNum
 mkdir softserve-standalone-$versionNum
-cp -r ./softserve/ ./softserve-standalone-$versionNum
+cp -r ./softserve/ ./softserve-standalone-$versionNum/softserve
 cp -r ./deps ./softserve-standalone-$versionNum/softserve/
 #cd ./softserve-standalone-$versionNum
 #zip -r ./softserve-standalone-$versionNum.zip . -i ./softserve-standalone-$versionNum/*
