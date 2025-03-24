@@ -1,7 +1,8 @@
-# new-softserve
-The development of the Jackbord-python library starts here
+##Project is now archived. I have been away from this project for years and have no intention to continue developing it.
 
-## Crash course documentation document available here: https://docs.google.com/document/d/1fniUAaZcdtHJZzuqJWjoJGyMrFEbRqHns_oaT8hcBl4/edit?usp=sharing
+## new-softserve
+
+### Crash course documentation document available here: https://docs.google.com/document/d/1fniUAaZcdtHJZzuqJWjoJGyMrFEbRqHns_oaT8hcBl4/edit?usp=sharing
 
 
 ### What softserve is:
